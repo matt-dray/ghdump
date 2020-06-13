@@ -1,6 +1,6 @@
-Package: allghrepos
+Package: ghdump
 Title: Download All Repos For A GitHub User
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: 
     person(given = "Matt",
            family = "Dray",
@@ -9,8 +9,8 @@ Authors@R:
 Description: Download all of a GitHub user's repositories as zip files to a
     specified location and unzip them. Intended for archiving or setting up a
     new computer.
-URL: https://github.com/matt-dray/allghrepos/
-BugReports: https://github.com/matt-dray/allghrepos/issues
+URL: https://github.com/matt-dray/ghdump/
+BugReports: https://github.com/matt-dray/ghdump/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

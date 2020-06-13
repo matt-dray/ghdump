@@ -1,4 +1,10 @@
-# allghrepos 0.0.0.9000
+# ghdump 0.0.0.9001
+
+* Renamed to {ghdump}
+* Replaced mentions of old package name
+* Added package doc
+
+# ghdump 0.0.0.9000
 
 * Set up package
 * Aded readme

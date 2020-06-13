@@ -1,5 +1,5 @@
 
-# allghrepos
+# ghdump
 
 <!-- badges: start -->
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
@@ -13,10 +13,10 @@ Works thanks to [the {gh} package](https://github.com/r-lib/gh) by Gábor Csárd
 
 ## Install
 
-You can install the devloper version of {allghrepos} from GitHub with:
+You can install the devloper version of {ghdump} from GitHub with:
 
 ``` r
-remotes::install_github("matt-drayallghrepos")
+remotes::install_github("matt-dray/ghdump")
 ```
 
 ## Example
@@ -29,10 +29,10 @@ browse_github_pat()  # opens browser to generate token
 edit_r_environ()     # add your token to the .Renviron
 ```
 
-The simplest use of the {allghrepos} package is to pass to the `download_all()` function a GitHub user name and a local directory to download into. The zipped repos will be downloaded and unzipped.
+The simplest use of the {ghdump} package is to pass to the `download_all()` function a GitHub user name and a local directory to download into. The zipped repos will be downloaded and unzipped.
 
 ``` r
-library(allghrepos)
+library(ghdump)
 
 download_all(
   gh_user = "matt-dray",     # user whose repos to download
@@ -42,4 +42,4 @@ download_all(
 
 ## Code of Conduct
   
-  Please note that the allghrepos project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+Please note that the {ghdump} project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.

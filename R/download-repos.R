@@ -10,7 +10,7 @@
 #' @param gh_user Character string. A GitHub username.
 #'
 #' @return A gh_response object.
-get_repos <- function(gh_user) {
+ghd_get_repos <- function(gh_user) {
 
   cat("Fetching GitHub repos for user", gh_user, "\n")
 
@@ -30,23 +30,22 @@ get_repos <- function(gh_user) {
 #' Extract all the 'name' elements from a gh_response object. These are the
 #' names of all the GitHub repos.
 #'
-#' @param repo_object A gh_response object, as returned by \code{\link{get_repos}}.
+#' @param repo_object A gh_response object, as returned by \code{\link{ghd_get_repos}}.
 #'
 #' @return A character vector of GitHub repo names.
-extract_repo_names <- function(repo_object) {
+ghd_extract_names <- function(repo_object) {
 
   repo_names <-
     purrr::map(
       .x = repo_object,
       .f = purrr::pluck("name")
-    ) %>%
-    unlist()
+    )
 
-  repo_count <- length(repo_names)
+  repo_names_vec <- unlist(repo_names)
 
-  cat(repo_count, "repos found\n")
+  cat(length(repo_names), "repos found\n")
 
-  return(repo_names)
+  return(repo_names_vec)
 
 }
 
@@ -56,23 +55,20 @@ extract_repo_names <- function(repo_object) {
 #' URL in the form https://github.com/username/reponame/archive/master.zip
 #'
 #' @param repo_names A character vector of GitHub repository names, as returned
-#'     by \code{\link{extract_repo_names}}.
+#'     by \code{\link{ghd_extract_names}}.
 #' @param gh_user The name of a GitHub user.
 #'
-#' @return A tibble/data.frame object. One row per GitHub repo with character
-#'     vector columns for the repo_name and zip_url.
-enframe_repo_urls <- function(repo_names, gh_user) {
+#' @return A data.frame object. One row per GitHub repo with character
+#'     vector columns for the repo_names and zip_url.
+ghd_enframe_urls <- function(repo_names, gh_user) {
 
-  repo_urls <-
-    repo_names %>%
-    tibble::enframe(name = NULL, value = "repo_name") %>%
-    dplyr::mutate(
-      zip_url = paste0(
-        "https://github.com/", gh_user, "/", repo_name, "/archive/master.zip"
-      )
-    )
+  repos_df <- as.data.frame(repo_names)
 
-  return(repo_urls)
+  repos_df$zip_url <- paste0(
+    "https://github.com/", gh_user, "/", repo_names, "/archive/master.zip"
+  )
+
+  return(repos_df)
 
 }
 
@@ -81,19 +77,49 @@ enframe_repo_urls <- function(repo_names, gh_user) {
 #' Download to a specified location the zip files from provided URL. The
 #' directory is created if it doesn't already exist.
 #'
-#' @param repo_urls A tibble/data.frame as returned by
-#'     \code{\link{enframe_repo_urls}}, with one row per GitHub repo with
-#'     character-class columns for the repo_name and zip_url.
+#' @param repo_urls A data.frame as returned by
+#'     \code{\link{ghd_enframe_urls}}, with one row per GitHub repo with
+#'     character-class columns for the repo_names and zip_url.
 #' @param dest_dir A character string. The local directory you want to download
 #'     the zipped files to.
 #'
 #' @return Zipped GitHub repositories downloaded to a (possibly new) directory.
-download_repo_zips <- function(repo_urls, dest_dir) {
+ghd_download_zips <- function(repo_urls, dest_dir) {
 
-  # Create dest_dir if it doesn't already exist
+  # Accepted strings as answers from users
+  affirm <- c("y", "Y", "yes", "Yes", "YES")
+  deny <- c("n", "N", "no", "No", "NO")
+
+  # Check if directory exists; ask user if they want to create it
   if (!isTRUE(dir.exists(dest_dir))) {
-    cat("Creating new directory:", dest_dir, "\n")
-    dir.create(path = dest_dir)
+
+    # Ask user to create directory if it doesn't exist
+    q_create_dir <- readline(
+      prompt = paste0("Create new directory at path ", dest_dir, "? y/n: ")
+    )
+
+    # Create the directory if 'yes'
+    if (q_create_dir %in% affirm) {
+      dir.create(path = dest_dir)
+    } else if (q_create_dir %in% deny) {
+      stop("Aborted by user choice. Please choose a different directory.")
+    } else {
+      stop("Aborted. Input not understood.")
+    }
+
+  }
+
+  # Ask if all the repos should be downloaded
+  q_download_all <- readline(
+    prompt = paste0("Download all ", nrow(repo_urls), " repos? y/n: ")
+  )
+
+  if (q_download_all %in% affirm) {
+    cat("Downloading zipped repositories to", dest_dir, "\n")
+  } else if (q_download_all %in% deny) {
+    stop("Aborted by user choice.")
+  } else {
+    stop("Aborted. Input not understood.")
   }
 
   # Prepare safe file download (passes over failures)
@@ -107,10 +133,9 @@ download_repo_zips <- function(repo_urls, dest_dir) {
     )
 
   # Download the zip files for each repo name
-  cat("Downloading zipped repositories to", dest_dir, "\n")
   purrr::walk2(
     .x = repo_urls$zip_url,
-    .y = repo_urls$repo_name,
+    .y = repo_urls$repo_names,
     .f = download_safely
   )
 
@@ -125,20 +150,20 @@ download_repo_zips <- function(repo_urls, dest_dir) {
 #'
 #' @param dir A string. Path to a local directory containing zipped GitHub
 #'     directories. These may have been downloaded using
-#'     \code{\link{download_repo_zips}}.
-#' @param rm_zip Logical. Having unzipped the files, should the zipped versions
-#'     be deleted?
-#' @param rename_dir Logical. Should the unzipped files be renamed to remove the
-#'     "-master" suffix?
+#'     \code{\link{ghd_download_zips}}.
 #'
 #' @return Unzipped GitHub repositories in a named directory.
-unzip_repos <- function(dir, rm_zip = TRUE, rename_dir = TRUE) {
+ghd_unzip <- function(dir) {
+
+  # Accepted strings as answers from users
+  affirm <- c("y", "Y", "yes", "Yes", "YES")
+  deny <- c("n", "N", "no", "No", "NO")
 
   # Paths to each zip file
   zip_files <-
     list.files(
       path = dir,
-      pattern = "*.zip",
+      pattern = "*.zip$",
       full.names = TRUE
     )
 
@@ -149,17 +174,35 @@ unzip_repos <- function(dir, rm_zip = TRUE, rename_dir = TRUE) {
     .f = ~ utils::unzip(zipfile = .x, exdir = dir)
   )
 
-  # Remove the zip files
-  if (isTRUE(rm_zip)) {
+  # Ask if the zip files should be retained
+  q_keep_zip <- readline(
+    prompt = paste0("Retain the zip files? y/n: ")
+  )
+
+  if (q_keep_zip %in% affirm) {
+    cat("Keeping zipped folders.")
+  } else if (q_keep_zip %in% deny) {
+
     cat("Removing zipped folders\n")
+
     purrr::walk(
       .x = zip_files,
       .f = file.remove
     )
+
+  } else {
+    cat("Input not understood. Keeping zipped folders.")
   }
 
-  # Remove the "-master" bit of the unzipped files
-  if (isTRUE(rename_dir)) {
+
+  # Ask if "-master" suffix of unzipped files should be replaced
+  q_remove_suffix <- readline(
+    prompt = paste0(
+      "Remove '-master' suffix from unzipped directory names? y/n: "
+    )
+  )
+
+  if (q_remove_suffix %in% affirm) {
 
     # Paths of each unzipped file
     unzipped_dirs <-
@@ -173,10 +216,8 @@ unzip_repos <- function(dir, rm_zip = TRUE, rename_dir = TRUE) {
     rename_df <-
       data.frame(
         from = unzipped_dirs,
-        to = stringr::str_remove(
-          string = unzipped_dirs,
-          pattern = "-master"
-        )
+        to = gsub(pattern = "-master", replacement = "", x = unzipped_dirs),
+        stringsAsFactors = FALSE
       )
 
     # Rename each file to remove "-master"
@@ -187,6 +228,11 @@ unzip_repos <- function(dir, rm_zip = TRUE, rename_dir = TRUE) {
       .f = file.rename
     )
 
+
+  } else if (q_remove_suffix %in% deny) {
+    cat("Unzipped repository names unchanged.")
+  } else {
+    cat("Input not understood. Leaving unzipped repository names unchanged.")
   }
 
 }
@@ -207,15 +253,31 @@ unzip_repos <- function(dir, rm_zip = TRUE, rename_dir = TRUE) {
 #'
 #' @examples
 #' \dontrun{
-#' download_all(gh_user = "matt-dray", dir = "~/Documents/repos")
+#' ghd_download(gh_user = "matt-dray", dir = "~/Documents/repos")
 #' }
-download_all <- function(gh_user, dir) {
+ghd_download <- function(gh_user, dir) {
 
-  gh_response <- get_repos(gh_user)
-  names_vec <- extract_repo_names(gh_response)
-  repos_df <- enframe_repo_urls(names_vec, gh_user)
-  download_repo_zips(repos_df, dir)
-  unzip_repos(dir)
+  # Accepted strings as answers from users
+  affirm <- c("y", "Y", "yes", "Yes", "YES")
+  deny <- c("n", "N", "no", "No", "NO")
+
+  gh_response <- ghd_get_repos(gh_user)
+
+  names_vec <- ghd_extract_names(gh_response)
+
+  repos_df <- ghd_enframe_urls(names_vec, gh_user)
+
+  ghd_download_zips(repos_df, dir)
+
+  q_unzip <- readline("Unzip all folders? y/n: ")
+  if (q_unzip %in% affirm) {
+    ghd_unzip(dir)
+  } else if (q_download_all %in% deny) {
+    cat("Directories will not be unzipped.")
+  } else {
+    cat("Input not understood. Directories will not be unzipped. Run ghdump:::ghd_unzip() if you change your mind.")
+  }
+
   cat("Finished\n")
 
 }

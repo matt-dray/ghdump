@@ -11,34 +11,45 @@ Download all of a GitHub user's repositories as zip files to a specified locatio
 
 Works thanks to [the {gh} package](https://github.com/r-lib/gh) by Gábor Csárdi, Jenny Bryan and Hadley Wickham.
 
-## Install
+## Using {ghdump}
 
-You can install the devloper version of {ghdump} from GitHub with:
+### GitHub PAT
+
+Assuming you have a GitHub account, generate a token for accessing the GitHub API and store this in your .Renviron file. The {usethis} package helps make this a breeze. Read more in the [Happy Git and GitHub for the useR](https://happygitwithr.com/github-pat.html) book by Jenny Bryan, the STAT 545 TAs and Jim Hester.
+
+```
+usethis::browse_github_pat()  # opens browser to generate token
+usethis::edit_r_environ()     # add your token to the .Renviron
+```
+
+Make sure to restart R after these steps.
+
+### Install
+
+You can install the developer version of {ghdump} from GitHub with:
 
 ``` r
 remotes::install_github("matt-dray/ghdump")
 ```
 
-## Example
+### Use `ghd_download()`
 
-Assuming you have a GitHub account, generate a token for accessing the GitHub API and store this in your .Renviron file. The {usethis} package helps make this a breeze. Read more in the [Happy Git and GitHub for the useR](https://happygitwithr.com/github-pat.html) book by Jenny Bryan, the STAT 545 TAs and Jim Hester.
-
-```
-library(usethis)
-browse_github_pat()  # opens browser to generate token
-edit_r_environ()     # add your token to the .Renviron
-```
-
-The simplest use of the {ghdump} package is to pass to the `download_all()` function a GitHub user name and a local directory to download into. The zipped repos will be downloaded and unzipped.
+{ghdump} has one exported function: `ghd_download()`. Pass to the function a GitHub user name and a local directory to download into. 
 
 ``` r
-library(ghdump)
-
-download_all(
+ghdump::ghd_download(
   gh_user = "matt-dray",     # user whose repos to download
   dir = "~/Documents/repos"  # where to download to
 )
 ```
+
+The function is designed to be used interactively and infrequently. To this end, the user is prompted throughout as to whether to:
+
+* create a new local directory with the provided 'dir' argument
+* download all zip files
+* unzip all the files
+* retain the zip files
+* rename the unzipped directories to remove the default '-master' suffix provided on download
 
 ## Code of Conduct
   

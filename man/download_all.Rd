@@ -13,7 +13,7 @@ download_all(gh_user, dir)
 will be downloaded to.}
 }
 \value{
-Unzipped folders in the specified directory.
+Unzipped GitHub repositories in a specified local directory.
 }
 \description{
 Download all of a GitHub user's repositories to your computer as zip files

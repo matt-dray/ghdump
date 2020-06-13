@@ -2,7 +2,7 @@
 
 * Set up package
 * Aded readme
-* Added R file
+* Added R file and documented functions
 * Added license
 * Added code of conduct
 * Added news

@@ -1,7 +1,18 @@
 
-# Get repo details for a user
-# Returns a gh_response/list object
+#' Get GitHub Repo Information for a Named User
+#'
+#' Uses \code{\link[gh]{gh}} to access the GitHub API and get the details for
+#' all of a named user;s repos. To use this function you need to have created a
+#' GitHub account and to have put a GitHub Personal Access Token (PAT) in your
+#' .Renviron. See \href{https://happygitwithr.com/github-pat.html}{Happy Git and GitHub for the UseR}
+#' for omre information.
+#'
+#' @param gh_user Character string. A GitHub username.
+#'
+#' @return A gh_response object.
 get_repos <- function(gh_user) {
+
+  cat("Fetching GitHub repos for user", gh_user, "\n")
 
   user_repos <-
     gh::gh(
@@ -14,8 +25,14 @@ get_repos <- function(gh_user) {
 
 }
 
-# Extract the names of a user's repo from the  gh_response/list object
-# Returns a vector
+#' Extract Names of GitHub Repos
+#'
+#' Extract all the 'name' elements from a gh_response object. These are the
+#' names of all the GitHub repos.
+#'
+#' @param repo_object A gh_response object, as returned by \code{\link{get_repos}}.
+#'
+#' @return A character vector of GitHub repo names.
 extract_repo_names <- function(repo_object) {
 
   repo_names <-
@@ -25,12 +42,25 @@ extract_repo_names <- function(repo_object) {
     ) %>%
     unlist()
 
+  repo_count <- length(repo_names)
+
+  cat(repo_count, "repos found\n")
+
   return(repo_names)
 
 }
 
-# Generate URLs to zip files of each repo
-# Returns a dataframe, one row per repo
+#' Create A Data Frame Of Repo Names And Zip File URLS For Each
+#'
+#' Prepare a data frame containing each repo name and its corresponding zip file
+#' URL in the form https://github.com/username/reponame/archive/master.zip
+#'
+#' @param repo_names A character vector of GitHub repository names, as returned
+#'     by \code{\link{extract_repo_names}}.
+#' @param gh_user The name of a GitHub user.
+#'
+#' @return A tibble/data.frame object. One row per GitHub repo with character
+#'     vector columns for the repo_name and zip_url.
 enframe_repo_urls <- function(repo_names, gh_user) {
 
   repo_urls <-
@@ -46,10 +76,21 @@ enframe_repo_urls <- function(repo_names, gh_user) {
 
 }
 
-# Download the repo zip files to a specified destination
+#' Download Zipped Repos To Your Machine
+#'
+#' Download to a specified location the zip files from provided URL. The
+#' directory is created if it doesn't already exist.
+#'
+#' @param repo_urls A tibble/data.frame as returned by
+#'     \code{\link{enframe_repo_urls}}, with one row per GitHub repo with
+#'     character-class columns for the repo_name and zip_url.
+#' @param dest_dir A character string. The local directory you want to download
+#'     the zipped files to.
+#'
+#' @return Zipped GitHub repositories downloaded to a (possibly new) directory.
 download_repo_zips <- function(repo_urls, dest_dir) {
 
-  # Create dest_dir if ti doesn't already exist
+  # Create dest_dir if it doesn't already exist
   if (!isTRUE(dir.exists(dest_dir))) {
     cat("Creating new directory:", dest_dir, "\n")
     dir.create(path = dest_dir)
@@ -75,7 +116,22 @@ download_repo_zips <- function(repo_urls, dest_dir) {
 
 }
 
-# Unzip files, potentially remove them and remove "-master" from file names
+#' Unzip GitHub Repositories In A Named Directory
+#'
+#' Unzips the GitHub repositories that have been downloaded to a specified
+#' local directory and optionally deletes the zipped versions. Optionally
+#' rename all the unzipped folders to remove the "-master" suffix (e.g.
+#' "demo-repo-master" becomes "demo-repo").
+#'
+#' @param dir A string. Path to a local directory containing zipped GitHub
+#'     directories. These may have been downloaded using
+#'     \code{\link{download_repo_zips}}.
+#' @param rm_zip Logical. Having unzipped the files, should the zipped versions
+#'     be deleted?
+#' @param rename_dir Logical. Should the unzipped files be renamed to remove the
+#'     "-master" suffix?
+#'
+#' @return Unzipped GitHub repositories in a named directory.
 unzip_repos <- function(dir, rm_zip = TRUE, rename_dir = TRUE) {
 
   # Paths to each zip file
@@ -146,7 +202,7 @@ unzip_repos <- function(dir, rm_zip = TRUE, rename_dir = TRUE) {
 #' @param dir Character string. A local file path where the zipped repositories
 #'     will be downloaded to.
 #'
-#' @return Unzipped folders in the specified directory.
+#' @return Unzipped GitHub repositories in a specified local directory.
 #' @export
 #'
 #' @examples

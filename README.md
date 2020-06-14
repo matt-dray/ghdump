@@ -1,3 +1,4 @@
+<img src="https://raw.githubusercontent.com/matt-dray/stickers/master/output/ghdump_hex.png" width="150" align="right">
 
 # ghdump
 

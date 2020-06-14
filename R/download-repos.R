@@ -257,6 +257,14 @@ ghd_unzip <- function(dir) {
 #' }
 ghd_download <- function(gh_user, dir) {
 
+  if (is.character(gh_user) == FALSE) {
+    stop("Argument gh_user must be a character string that's a GitHub user.")
+  }
+
+  if (is.character(dir) == FALSE) {
+    stop("Argument dir must be a character string that represents a file path.")
+  }
+
   # Accepted strings as answers from users
   affirm <- c("y", "Y", "yes", "Yes", "YES")
   deny <- c("n", "N", "no", "No", "NO")

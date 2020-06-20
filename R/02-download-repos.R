@@ -1,53 +1,4 @@
-
-#' Get GitHub Repo Information for a Named User
-#'
-#' Uses \code{\link[gh]{gh}} to access the GitHub API and get the details for
-#' all of a named user's repos. To use this function you need to have created a
-#' GitHub account and to have put a GitHub Personal Access Token (PAT) in your
-#' .Renviron. See \href{https://happygitwithr.com/github-pat.html}{Happy Git and GitHub for the UseR}
-#' for omre information.
-#'
-#' @param gh_user Character string. A GitHub username.
-#'
-#' @return A gh_response object.
-ghd_get_repos <- function(gh_user) {
-
-  cat("Fetching GitHub repos for user", gh_user, "\n")
-
-  user_repos <-
-    gh::gh(
-      endpoint = "/users/:username/repos",
-      username = gh_user,
-      .limit = Inf  # get all repos
-    )
-
-  return(user_repos)
-
-}
-
-#' Extract Names of GitHub Repos
-#'
-#' Extract all the 'name' elements from a gh_response object. These are the
-#' names of all the GitHub repos.
-#'
-#' @param repo_object A gh_response object, as returned by \code{\link{ghd_get_repos}}.
-#'
-#' @return A character vector of GitHub repo names.
-ghd_extract_names <- function(repo_object) {
-
-  repo_names <-
-    purrr::map(
-      .x = repo_object,
-      .f = purrr::pluck("name")
-    )
-
-  repo_names_vec <- unlist(repo_names)
-
-  cat(length(repo_names), "repos found\n")
-
-  return(repo_names_vec)
-
-}
+# Purpose: download and optionally unzip and rename repos
 
 #' Create A Data Frame Of Repo Names And Zip File URLS For Each
 #'
@@ -89,25 +40,6 @@ ghd_download_zips <- function(repo_urls, dest_dir) {
   # Accepted strings as answers from users
   affirm <- c("y", "Y", "yes", "Yes", "YES")
   deny <- c("n", "N", "no", "No", "NO")
-
-  # Check if directory exists; ask user if they want to create it
-  if (!isTRUE(dir.exists(dest_dir))) {
-
-    # Ask user to create directory if it doesn't exist
-    q_create_dir <- readline(
-      prompt = paste0("Create new directory at path ", dest_dir, "? y/n: ")
-    )
-
-    # Create the directory if 'yes'
-    if (q_create_dir %in% affirm) {
-      dir.create(path = dest_dir)
-    } else if (q_create_dir %in% deny) {
-      stop("Aborted by user choice. Please choose a different directory.\n")
-    } else {
-      stop("Aborted. Input not understood.\n")
-    }
-
-  }
 
   # Ask if all the repos should be downloaded
   q_download_all <- readline(
@@ -234,61 +166,5 @@ ghd_unzip <- function(dir) {
   } else {
     cat("Input not understood. Leaving unzipped repository names unchanged.\n")
   }
-
-}
-
-#' Download All GitHub Repositories For A User
-#'
-#' Download all of a GitHub user's repositories to your computer as zip files
-#' and then optionally unzip them. Make sure you've got a GitHub account and
-#' have generated a GitHub PAT token and stored it your .Renviron. See
-#' package README for details.
-#'
-#' @param gh_user Character string. A GitHub user name.
-#' @param dir Character string. A local file path where the zipped repositories
-#'     will be downloaded to.
-#'
-#' @return Unzipped GitHub repositories in a specified local directory.
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' ghd_download(gh_user = "matt-dray", dir = "~/Documents/repos")
-#' }
-ghd_download <- function(gh_user, dir) {
-
-  if (is.character(gh_user) == FALSE) {
-    stop("Argument gh_user must be a character string that's a GitHub user.\n")
-  }
-
-  if (is.character(dir) == FALSE) {
-    stop("Argument dir must be a character string that represents a file path.\n")
-  }
-
-  # Accepted strings as answers from users
-  affirm <- c("y", "Y", "yes", "Yes", "YES")
-  deny <- c("n", "N", "no", "No", "NO")
-
-  gh_response <- ghd_get_repos(gh_user)
-
-  names_vec <- ghd_extract_names(gh_response)
-
-  repos_df <- ghd_enframe_urls(names_vec, gh_user)
-
-  ghd_download_zips(repos_df, dir)
-
-  q_unzip <- readline("Unzip all folders? y/n: ")
-  if (q_unzip %in% affirm) {
-    ghd_unzip(dir)
-  } else if (q_unzip %in% deny) {
-    cat("Directories will not be unzipped.\n")
-  } else {
-    cat(
-      "Input not understood. Directories will not be unzipped.\n",
-      "See ?ghdump:::ghd_unzip() to unzip the directories yourself.\n"
-    )
-  }
-
-  cat("Finished\n")
 
 }

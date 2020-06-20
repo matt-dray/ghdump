@@ -1,3 +1,10 @@
+# ghdump 0.0.0.9004
+
+* Breaking: rename ghd_download() to ghd_copy()
+* Introduce cloning functionality for (at least) Mac (#6)
+* Update readme given new functionality
+* Separate `r/` into seaprate files
+
 # ghdump 0.0.0.9003
 
 * Fixed error when unzipping answer is 'no' (#5)

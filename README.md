@@ -10,7 +10,7 @@ post](https://img.shields.io/badge/rostrum.blog-post-008900?style=flat&labelColo
 
 ## Purpose
 
-Download all of a GitHub user's repositories as zip files to a specified location and unzip them. Intended for archiving purposes.
+Clone all of a GitHub user's repositories, or download them as zip files to a specified location and unzip them. Intended for archiving purposes or setting up on a new computer.
 
 Works thanks to [the {gh} package](https://github.com/r-lib/gh) by Gábor Csárdi, Jenny Bryan and Hadley Wickham.
 
@@ -39,22 +39,24 @@ remotes::install_github("matt-dray/ghdump")
 
 ### Use `ghd_download()`
 
-{ghdump} has one exported function: `ghd_download()`. Pass to the function a GitHub user name and a local directory to download into. 
+{ghdump} has one exported function: `ghd_copy()` (was `ghd_download()` prior to v0.0.0.9004). Pass to the function a GitHub user name, a local directory to download into and whether you want to download or clone the repos.
 
 ``` r
-ghdump::ghd_download(
-  gh_user = "matt-dray",     # user whose repos to download
-  dir = "~/Documents/repos"  # where to download to
+ghdump::ghd_copy(
+  gh_user = "matt-dray",  # user whose repos to download
+  dest_dir = "~/Documents/repos",  # where to copy to
+  copy_type = "clone"  # "download" or "clone" the repos
 )
 ```
 
 The function is designed to be used interactively and infrequently. To this end, the user is prompted throughout as to whether to:
 
-* create a new local directory with the provided 'dir' argument
-* download all zip files
-* unzip all the files
-* retain the zip files
-* rename the unzipped directories to remove the default '-master' suffix provided on download
+* create a new local directory with the provided 'dest_dir' argument
+* commit to cloning all the repos (if `copy_type = "clone"`) 
+* commit to downloading all zip files  (if `copy_type = "download"`) and then whether to:
+    * unzip all the files
+    * retain the zip files
+    * rename the unzipped directories to remove the default '-master' suffix
 
 ## Code of Conduct
   

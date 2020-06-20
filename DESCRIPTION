@@ -1,5 +1,5 @@
 Package: ghdump
-Title: Download All Repos For A GitHub User
+Title: Clone Or Download All Repos For A GitHub User
 Version: 0.0.0.9004
 Authors@R: 
     person(given = "Matt",

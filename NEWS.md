@@ -1,9 +1,12 @@
 # ghdump 0.0.0.9004
 
-* Breaking: rename ghd_download() to ghd_copy()
-* Introduce cloning functionality for (at least) Mac (#6)
-* Update readme given new functionality
-* Separate `r/` into seaprate files
+* Breaking: renamed ghd_download() to ghd_copy()
+* Introduced cloning functionality for (at least) Mac (#6)
+* Updated readme given new functionality
+* Separated scripts in `r/` into different files
+* Minor improvements to code comments and user prompt text
+* Preferred ?readlines() example for 'y'/'n' user input
+* Add license
 
 # ghdump 0.0.0.9003
 

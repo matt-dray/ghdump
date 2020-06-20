@@ -17,5 +17,5 @@ Uses \code{\link[gh]{gh}} to access the GitHub API and get the details for
 all of a named user's repos. To use this function you need to have created a
 GitHub account and to have put a GitHub Personal Access Token (PAT) in your
 .Renviron. See \href{https://happygitwithr.com/github-pat.html}{Happy Git and GitHub for the UseR}
-for omre information.
+for more information.
 }

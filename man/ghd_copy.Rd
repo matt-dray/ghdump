@@ -4,30 +4,34 @@
 \alias{ghd_copy}
 \title{Clone Or Download All GitHub Repositories For A User}
 \usage{
-ghd_copy(gh_user, dest_dir, copy_type = c("download", "clone"))
+ghd_copy(gh_user, dest_dir, copy_type = c("clone", "download"))
 }
 \arguments{
 \item{gh_user}{Character string. A GitHub user name.}
 
-\item{dest_dir}{Character string. A local file path where the zipped repositories
-will be downloaded to.}
+\item{dest_dir}{Character string. A local file path where the clones or
+zipped repositories will be downloaded to. Must be a full path.}
 
 \item{copy_type}{Character string. Specify whether to \code{"download"}
 or \code{"clone"} the repos to your local machine.}
 }
 \value{
-GitHub repositories either (a) downloaded or (b) cloned in the
+GitHub repositories either (a) cloned or (b) downloaded in the
 specified local directory.
 }
 \description{
 Clone all of a GitHub user's repositories to your computer, or download them
-all as zip files and then optionally unzip them. Make sure you've got a
-GitHub account and have generated a GitHub PAT token and stored it your
-.Renviron. See package README for details.
+all as zip files and then optionally unzip them.
+}
+\details{
+Make sure you've got a GitHub account and have generated a GitHub
+PAT token and stored it your .Renviron. See
+\href{https://happygitwithr.com/github-pat.html}{Happy Git and GitHub for the UseR}
+for more information.
 }
 \examples{
 \dontrun{
-ghd_get(
+ghd_copy(
   gh_user = "matt-dray",
   dest_dir = "~/Documents/repos",
   copy_type = "clone"

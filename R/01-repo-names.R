@@ -6,15 +6,19 @@
 #' all of a named user's repos. To use this function you need to have created a
 #' GitHub account and to have put a GitHub Personal Access Token (PAT) in your
 #' .Renviron. See \href{https://happygitwithr.com/github-pat.html}{Happy Git and GitHub for the UseR}
-#' for omre information.
+#' for more information.
 #'
 #' @param gh_user Character string. A GitHub username.
 #'
 #' @return A gh_response object.
 ghd_get_repos <- function(gh_user) {
 
-  cat("Fetching GitHub repos for user", gh_user, "\n")
+  cat(
+    "Fetching GitHub repos for user ", gh_user, "... ",
+    sep = ""
+      )
 
+  # Get repos for username
   user_repos <-
     gh::gh(
       endpoint = "/users/:username/repos",

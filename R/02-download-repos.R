@@ -32,26 +32,29 @@ ghd_enframe_urls <- function(repo_names, gh_user) {
 #'     \code{\link{ghd_enframe_urls}}, with one row per GitHub repo with
 #'     character-class columns for the repo_names and zip_url.
 #' @param dest_dir A character string. The local directory you want to download
-#'     the zipped files to.
+#'     the zipped files to. Must be a full path.
 #'
 #' @return Zipped GitHub repositories downloaded to a (possibly new) directory.
 ghd_download_zips <- function(repo_urls, dest_dir) {
 
-  # Accepted strings as answers from users
-  affirm <- c("y", "Y", "yes", "Yes", "YES")
-  deny <- c("n", "N", "no", "No", "NO")
-
   # Ask if all the repos should be downloaded
   q_download_all <- readline(
-    prompt = paste0("Download all ", nrow(repo_urls), " repos? y/n: ")
+    prompt = paste0(
+      "Definitely download all ", nrow(repo_urls), " repos? y/n: ")
   )
 
-  if (q_download_all %in% affirm) {
+  if (substr(tolower(q_download_all), 1, 1) == "y") {
+
     cat("Downloading zipped repositories to", dest_dir, "\n")
-  } else if (q_download_all %in% deny) {
+
+  } else if (substr(tolower(q_download_all), 1, 1) == "n") {
+
     stop("Aborted by user choice.\n")
+
   } else {
+
     stop("Aborted. Input not understood.\n")
+
   }
 
   # Prepare safe file download (passes over failures)
@@ -82,14 +85,10 @@ ghd_download_zips <- function(repo_urls, dest_dir) {
 #'
 #' @param dir A string. Path to a local directory containing zipped GitHub
 #'     directories. These may have been downloaded using
-#'     \code{\link{ghd_download_zips}}.
+#'     \code{\link{ghd_download_zips}}. Must be a full path.
 #'
 #' @return Unzipped GitHub repositories in a named directory.
 ghd_unzip <- function(dir) {
-
-  # Accepted strings as answers from users
-  affirm <- c("y", "Y", "yes", "Yes", "YES")
-  deny <- c("n", "N", "no", "No", "NO")
 
   # Paths to each zip file
   zip_files <-
@@ -111,9 +110,12 @@ ghd_unzip <- function(dir) {
     prompt = paste0("Retain the zip files? y/n: ")
   )
 
-  if (q_keep_zip %in% affirm) {
+  # React to user input
+  if (substr(tolower(q_keep_zip), 1, 1) == "y") {
+
     cat("Keeping zipped folders.")
-  } else if (q_keep_zip %in% deny) {
+
+  } else if (substr(tolower(q_keep_zip), 1, 1) == "n") {
 
     cat("Removing zipped folders\n")
 
@@ -134,9 +136,10 @@ ghd_unzip <- function(dir) {
     )
   )
 
-  if (q_remove_suffix %in% affirm) {
+  # React to user input
+  if (substr(tolower(q_remove_suffix), 1, 1) == "y") {
 
-    # Paths of each unzipped file
+    # Get paths of each unzipped file
     unzipped_dirs <-
       list.dirs(
         path = dir,
@@ -160,11 +163,14 @@ ghd_unzip <- function(dir) {
       .f = file.rename
     )
 
+  } else if (substr(tolower(q_remove_suffix), 1, 1) == "n") {
 
-  } else if (q_remove_suffix %in% deny) {
     cat("Unzipped repository names unchanged.\n")
+
   } else {
+
     cat("Input not understood. Leaving unzipped repository names unchanged.\n")
+
   }
 
 }

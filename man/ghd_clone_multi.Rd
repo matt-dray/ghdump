@@ -12,7 +12,7 @@ ghd_clone_multi(gh_user, names_vec, dest_dir)
 \item{names_vec}{Character vector. Repo names for the given \code{gh_user}.}
 
 \item{dest_dir}{Character string. A local file path where the zipped repositories
-will be downloaded to.}
+will be downloaded to. Must be a full path.}
 }
 \value{
 The named user's named repos cloned to the specified location.

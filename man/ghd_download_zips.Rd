@@ -12,7 +12,7 @@ ghd_download_zips(repo_urls, dest_dir)
 character-class columns for the repo_names and zip_url.}
 
 \item{dest_dir}{A character string. The local directory you want to download
-the zipped files to.}
+the zipped files to. Must be a full path.}
 }
 \value{
 Zipped GitHub repositories downloaded to a (possibly new) directory.

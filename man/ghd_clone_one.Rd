@@ -11,8 +11,8 @@ ghd_clone_one(gh_user, repo, dest_dir)
 
 \item{repo}{Character string. A GitHub repo name for the named \code{gh_user}.}
 
-\item{dest_dir}{Character string. A local file path where the zipped repositories
-will be downloaded to.}
+\item{dest_dir}{Character string. A local file path where the zipped
+repositories will be downloaded to.  Must be a full path.}
 }
 \value{
 The named user's named repo cloned to the specified location.

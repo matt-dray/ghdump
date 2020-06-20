@@ -9,7 +9,7 @@ ghd_unzip(dir)
 \arguments{
 \item{dir}{A string. Path to a local directory containing zipped GitHub
 directories. These may have been downloaded using
-\code{\link{ghd_download_zips}}.}
+\code{\link{ghd_download_zips}}. Must be a full path.}
 }
 \value{
 Unzipped GitHub repositories in a named directory.

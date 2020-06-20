@@ -10,7 +10,7 @@ post](https://img.shields.io/badge/rostrum.blog-post-008900?style=flat&labelColo
 
 ## Purpose
 
-Download all of a GitHub user's repositories as zip files to a specified location and unzip them. Intended for archiving or setting up a new computer.
+Download all of a GitHub user's repositories as zip files to a specified location and unzip them. Intended for archiving purposes.
 
 Works thanks to [the {gh} package](https://github.com/r-lib/gh) by Gábor Csárdi, Jenny Bryan and Hadley Wickham.
 

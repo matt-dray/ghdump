@@ -102,9 +102,9 @@ ghd_download_zips <- function(repo_urls, dest_dir) {
     if (q_create_dir %in% affirm) {
       dir.create(path = dest_dir)
     } else if (q_create_dir %in% deny) {
-      stop("Aborted by user choice. Please choose a different directory.")
+      stop("Aborted by user choice. Please choose a different directory.\n")
     } else {
-      stop("Aborted. Input not understood.")
+      stop("Aborted. Input not understood.\n")
     }
 
   }
@@ -117,9 +117,9 @@ ghd_download_zips <- function(repo_urls, dest_dir) {
   if (q_download_all %in% affirm) {
     cat("Downloading zipped repositories to", dest_dir, "\n")
   } else if (q_download_all %in% deny) {
-    stop("Aborted by user choice.")
+    stop("Aborted by user choice.\n")
   } else {
-    stop("Aborted. Input not understood.")
+    stop("Aborted. Input not understood.\n")
   }
 
   # Prepare safe file download (passes over failures)
@@ -191,7 +191,7 @@ ghd_unzip <- function(dir) {
     )
 
   } else {
-    cat("Input not understood. Keeping zipped folders.")
+    cat("Input not understood. Keeping zipped folders.\n")
   }
 
 
@@ -230,9 +230,9 @@ ghd_unzip <- function(dir) {
 
 
   } else if (q_remove_suffix %in% deny) {
-    cat("Unzipped repository names unchanged.")
+    cat("Unzipped repository names unchanged.\n")
   } else {
-    cat("Input not understood. Leaving unzipped repository names unchanged.")
+    cat("Input not understood. Leaving unzipped repository names unchanged.\n")
   }
 
 }
@@ -258,11 +258,11 @@ ghd_unzip <- function(dir) {
 ghd_download <- function(gh_user, dir) {
 
   if (is.character(gh_user) == FALSE) {
-    stop("Argument gh_user must be a character string that's a GitHub user.")
+    stop("Argument gh_user must be a character string that's a GitHub user.\n")
   }
 
   if (is.character(dir) == FALSE) {
-    stop("Argument dir must be a character string that represents a file path.")
+    stop("Argument dir must be a character string that represents a file path.\n")
   }
 
   # Accepted strings as answers from users
@@ -280,10 +280,13 @@ ghd_download <- function(gh_user, dir) {
   q_unzip <- readline("Unzip all folders? y/n: ")
   if (q_unzip %in% affirm) {
     ghd_unzip(dir)
-  } else if (q_download_all %in% deny) {
-    cat("Directories will not be unzipped.")
+  } else if (q_unzip %in% deny) {
+    cat("Directories will not be unzipped.\n")
   } else {
-    cat("Input not understood. Directories will not be unzipped. Run ghdump:::ghd_unzip() if you change your mind.")
+    cat(
+      "Input not understood. Directories will not be unzipped.\n",
+      "See ?ghdump:::ghd_unzip() to unzip the directories yourself.\n"
+    )
   }
 
   cat("Finished\n")

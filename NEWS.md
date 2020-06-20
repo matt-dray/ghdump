@@ -1,3 +1,8 @@
+# ghdump 0.0.0.9003
+
+* Fixed error when unzipping answer is 'no' (#5)
+* Updated readme to be clear about archival use
+
 # ghdump 0.0.0.9002
 
 * Remove all dependencies except {gh} and {purrr}

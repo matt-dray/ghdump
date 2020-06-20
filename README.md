@@ -10,13 +10,13 @@ post](https://img.shields.io/badge/rostrum.blog-post-008900?style=flat&labelColo
 
 ## Purpose
 
-Download all of a GitHub user's repositories as zip files to a specified location and unzip them. Intended for archiving purposes.
-
-Works thanks to [the {gh} package](https://github.com/r-lib/gh) by Gábor Csárdi, Jenny Bryan and Hadley Wickham.
+Clone all of a GitHub user's repositories, or download them as zip files to a specified location and unzip them. Intended for archiving purposes or setting up on a new computer.
 
 ## Using {ghdump}
 
 Learn more about this package from [an associated blog post](https://www.rostrum.blog/2020/06/14/ghdump/).
+
+Note that the package is under development, may not work in all environments and is not fully tested. Use at own risk.
 
 ### GitHub PAT
 
@@ -39,22 +39,30 @@ remotes::install_github("matt-dray/ghdump")
 
 ### Use `ghd_download()`
 
-{ghdump} has one exported function: `ghd_download()`. Pass to the function a GitHub user name and a local directory to download into. 
+{ghdump} has one exported function: `ghd_copy()`. Pass to the function a GitHub user name, a local directory to download into and whether you want to download or clone the repos.
 
 ``` r
-ghdump::ghd_download(
-  gh_user = "matt-dray",     # user whose repos to download
-  dir = "~/Documents/repos"  # where to download to
+ghdump::ghd_copy(
+  gh_user = "matt-dray",  # user whose repos to download
+  dest_dir = "~/Documents/repos",  # where to copy to
+  copy_type = "clone"  # "clone" or "download" the repos
 )
 ```
 
 The function is designed to be used interactively and infrequently. To this end, the user is prompted throughout as to whether to:
 
-* create a new local directory with the provided 'dir' argument
-* download all zip files
-* unzip all the files
-* retain the zip files
-* rename the unzipped directories to remove the default '-master' suffix provided on download
+* create a new local directory with the provided 'dest_dir' argument
+* commit to cloning all the repos (if `copy_type = "clone"`) 
+* commit to downloading all zip files  (if `copy_type = "download"`) and then whether to:
+    * unzip all the files
+    * retain the zip files
+    * rename the unzipped directories to remove the default '-master' suffix
+
+## Credits
+
+The function interacts with the GitHub API thanks to [the {gh} package](https://github.com/r-lib/gh) by Gábor Csárdi, Jenny Bryan and Hadley Wickham. Iteration is thanks to [the {purrr} package](https://purrr.tidyverse.org/) by Lionel Henry and Hadley Wickham.
+
+The {ghdump} package sticker was made thanks to Dmytro Perepolkin's [{bunny}](https://github.com/dmi3kno/bunny) package and the [{magick} package](https://cran.r-project.org/web/packages/magick/vignettes/intro.html) from Jeroen Ooms.
 
 ## Code of Conduct
   

@@ -4,11 +4,11 @@
 \name{ghdump-package}
 \alias{ghdump}
 \alias{ghdump-package}
-\title{ghdump: Download All Repos For A GitHub User}
+\title{ghdump: Clone Or Download All Repos For A GitHub User}
 \description{
-Download all of a GitHub user's repositories as zip files to a
-    specified location and unzip them. Intended for archiving or setting up a
-    new computer.
+Clone all of a GitHub user's repositories, or download them as zip
+    files to a specified location and optionally unzip them. Intended for
+    archiving or setting up a new computer.
 }
 \seealso{
 Useful links:

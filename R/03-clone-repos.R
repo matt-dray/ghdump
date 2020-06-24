@@ -7,21 +7,21 @@
 #' @param gh_user Character string. A GitHub user name.
 #' @param repo Character string. A GitHub repo name for the named \code{gh_user}.
 #' @param dest_dir Character string. A local file path where the zipped
-#'     repositories will be downloaded to.  Must be a full path.
+#'     repositories will be downloaded to. Must be a full path.
 #'
 #' @return The named user's named repo cloned to the specified location.
 ghd_clone_one <- function(gh_user, repo, dest_dir) {
 
   system(
     paste0(
-      "cd ", dest_dir, "; ",
-      "git clone https://github.com/", gh_user, "/", repo, ".git"
+      "git clone https://github.com/", gh_user, "/", repo, ".git ",
+      dest_dir, "/", repo
     )
   )
 
 }
 
-#' Clone Mulitple Repos From A GitHub User
+#' Clone Multiple Repos From A GitHub User
 #'
 #' Iterate over multiple repos for a given GitHub user, cloning them to a
 #' specified local repository.

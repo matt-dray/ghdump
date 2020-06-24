@@ -2,7 +2,7 @@
 % Please edit documentation in R/03-clone-repos.R
 \name{ghd_clone_multi}
 \alias{ghd_clone_multi}
-\title{Clone Mulitple Repos From A GitHub User}
+\title{Clone Multiple Repos From A GitHub User}
 \usage{
 ghd_clone_multi(gh_user, names_vec, dest_dir)
 }

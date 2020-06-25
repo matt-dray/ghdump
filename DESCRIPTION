@@ -1,6 +1,6 @@
 Package: ghdump
 Title: Clone Or Download All Repos For A GitHub User
-Version: 0.0.0.9004
+Version: 0.0.0.9005
 Authors@R: 
     person(given = "Matt",
            family = "Dray",
@@ -17,5 +17,5 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 Imports: 
-    gh,
-    purrr
+    gh (>= 1.1.0),
+    purrr (>= 0.3.4)

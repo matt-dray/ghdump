@@ -37,7 +37,7 @@ You can install the developer version of {ghdump} from GitHub with:
 remotes::install_github("matt-dray/ghdump")
 ```
 
-### Use `ghd_download()`
+### Use `ghd_copy()`
 
 {ghdump} has one exported function: `ghd_copy()`. Pass to the function a GitHub user name, a local directory to download into and whether you want to download or clone the repos.
 

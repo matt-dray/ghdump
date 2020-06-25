@@ -1,3 +1,7 @@
+# ghdump 0.0.0.9005
+
+* Altered system call when cloning to work on Windows (#9)
+
 # ghdump 0.0.0.9004
 
 * Breaking: renamed ghd_download() to ghd_copy()

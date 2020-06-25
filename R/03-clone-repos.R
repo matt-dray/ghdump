@@ -12,6 +12,7 @@
 #' @return The named user's named repo cloned to the specified location.
 ghd_clone_one <- function(gh_user, repo, dest_dir) {
 
+  # Pass a system call to clone the repo to the desination
   system(
     paste0(
       "git clone https://github.com/", gh_user, "/", repo, ".git ",

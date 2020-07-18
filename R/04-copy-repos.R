@@ -8,11 +8,13 @@
 #'     zipped repositories will be downloaded to. Must be a full path.
 #' @param copy_type Character string. Specify whether to \code{"download"}
 #'     or \code{"clone"} the repos to your local machine.
+#' @param protocol Character string. Either \code{"https"} or \code{"ssh"}. Only
+#'     required if \code{copy_type = "clone"}.
 #'
-#' @details Make sure you've got a GitHub account and have generated a GitHub
-#' PAT token and stored it your .Renviron. See
-#' \href{https://happygitwithr.com/github-pat.html}{Happy Git and GitHub for the UseR}
-#' for more information.
+#' @details Make sure you've got a GitHub account and have
+#'     \href{https://happygitwithr.com/github-pat.html}{generated a GitHub PAT}
+#'     and stored it your .Renviron. If you're using \code{protocol = "ssh"},
+#'     you need to make sure you have \href{https://happygitwithr.com/ssh-keys.html}{set up your SSH keys}.
 #'
 #' @return GitHub repositories either (a) cloned or (b) downloaded in the
 #'     specified local directory.
@@ -23,11 +25,18 @@
 #' \dontrun{
 #' ghd_copy(
 #'   gh_user = "matt-dray",
-#'   dest_dir = "~/Documents/repos",
-#'   copy_type = "clone"
+#'   dest_dir = "~/Documents/repos-cloned",
+#'   copy_type = "clone",
+#'   protocol = "https"
+#' )
+#'
+#' ghd_copy(
+#'   gh_user = "matt-dray",
+#'   dest_dir = "~/Documents/repos-downloaded",
+#'   copy_type = "download"
 #' )
 #' }
-ghd_copy <- function(gh_user, dest_dir, copy_type = c("clone", "download")) {
+ghd_copy <- function(gh_user, dest_dir, copy_type, protocol = NULL) {
 
   if (is.character(gh_user) == FALSE) {
     stop("Argument gh_user must be a character string that's a GitHub user.\n")
@@ -39,6 +48,18 @@ ghd_copy <- function(gh_user, dest_dir, copy_type = c("clone", "download")) {
 
   if (!copy_type %in% c("download", "clone")) {
     stop("Argument copy_type must be 'clone' or 'download'.\n")
+  }
+
+  if (copy_type == "clone" & is.null(protocol)) {
+    stop("You must provide either 'https' or 'ssh' to the protocol argument.")
+  }
+
+  if (copy_type == "clone" & !protocol %in% c("https", "ssh")) {
+    stop("You must provide either 'https' or 'ssh' to the protocol argument.")
+  }
+
+  if (copy_type == "download" & !is.null(protocol)) {
+    warning("You don't need the protocol argument for downloads. Did you mean to clone instead?")
   }
 
   # Get repo info for the user
@@ -77,7 +98,7 @@ ghd_copy <- function(gh_user, dest_dir, copy_type = c("clone", "download")) {
 
   if (copy_type == "clone") {  # if cloning
 
-    ghd_clone_multi(gh_user, names_vec, dest_dir)
+    ghd_clone_multi(gh_user, names_vec, protocol, dest_dir)
 
     cat("Finished cloning\n")
 

@@ -1,3 +1,7 @@
+# ghdump 0.0.0.9006
+
+* Added protocol argument for user to choose HTTPS or SSH (#10)
+
 # ghdump 0.0.0.9005
 
 * Altered system call when cloning to work on Windows (#9)

@@ -4,12 +4,14 @@
 \alias{ghd_clone_multi}
 \title{Clone Multiple Repos From A GitHub User}
 \usage{
-ghd_clone_multi(gh_user, names_vec, dest_dir)
+ghd_clone_multi(gh_user, names_vec, protocol, dest_dir)
 }
 \arguments{
 \item{gh_user}{Character string. A GitHub user name.}
 
 \item{names_vec}{Character vector. Repo names for the given \code{gh_user}.}
+
+\item{protocol}{Character string. Either \code{"https"} or \code{"ssh"}.}
 
 \item{dest_dir}{Character string. A local file path where the zipped repositories
 will be downloaded to. Must be a full path.}
@@ -20,4 +22,8 @@ The named user's named repos cloned to the specified location.
 \description{
 Iterate over multiple repos for a given GitHub user, cloning them to a
 specified local repository.
+}
+\details{
+If you're using \code{protocol = "ssh"}, you need to make sure
+you've \href{https://happygitwithr.com/ssh-keys.html}{set up your SSH keys}.
 }

@@ -4,7 +4,7 @@
 \alias{ghd_copy}
 \title{Clone Or Download All GitHub Repositories For A User}
 \usage{
-ghd_copy(gh_user, dest_dir, copy_type = c("clone", "download"))
+ghd_copy(gh_user, dest_dir, copy_type, protocol = NULL)
 }
 \arguments{
 \item{gh_user}{Character string. A GitHub user name.}
@@ -14,6 +14,9 @@ zipped repositories will be downloaded to. Must be a full path.}
 
 \item{copy_type}{Character string. Specify whether to \code{"download"}
 or \code{"clone"} the repos to your local machine.}
+
+\item{protocol}{Character string. Either \code{"https"} or \code{"ssh"}. Only
+required if \code{copy_type = "clone"}.}
 }
 \value{
 GitHub repositories either (a) cloned or (b) downloaded in the
@@ -24,17 +27,24 @@ Clone all of a GitHub user's repositories to your computer, or download them
 all as zip files and then optionally unzip them.
 }
 \details{
-Make sure you've got a GitHub account and have generated a GitHub
-PAT token and stored it your .Renviron. See
-\href{https://happygitwithr.com/github-pat.html}{Happy Git and GitHub for the UseR}
-for more information.
+Make sure you've got a GitHub account and have
+\href{https://happygitwithr.com/github-pat.html}{generated a GitHub PAT}
+and stored it your .Renviron. If you're using \code{protocol = "ssh"},
+you need to make sure you have \href{https://happygitwithr.com/ssh-keys.html}{set up your SSH keys}.
 }
 \examples{
 \dontrun{
 ghd_copy(
   gh_user = "matt-dray",
-  dest_dir = "~/Documents/repos",
-  copy_type = "clone"
+  dest_dir = "~/Documents/repos-cloned",
+  copy_type = "clone",
+  protocol = "https"
+)
+
+ghd_copy(
+  gh_user = "matt-dray",
+  dest_dir = "~/Documents/repos-downloaded",
+  copy_type = "download"
 )
 }
 }

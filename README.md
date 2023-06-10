@@ -60,7 +60,8 @@ To download:
 ghdump::ghd_copy(
   gh_user = "matt-dray",
   dest_dir = "~/Documents/repos",
-  copy_type = "download"
+  copy_type = "download",
+  protocol = "https"
 )
 ```
 

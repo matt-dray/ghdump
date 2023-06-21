@@ -14,7 +14,8 @@
 #' @details Make sure you've got a GitHub account and have
 #'     \href{https://happygitwithr.com/github-pat.html}{generated a GitHub PAT}
 #'     and stored it your .Renviron. If you're using \code{protocol = "ssh"},
-#'     you need to make sure you have \href{https://happygitwithr.com/ssh-keys.html}{set up your SSH keys}.
+#'     you need to make sure you have
+#'     \href{https://happygitwithr.com/ssh-keys.html}{set up your SSH keys}.
 #'
 #' @return GitHub repositories either (a) cloned or (b) downloaded in the
 #'     specified local directory.
@@ -38,28 +39,59 @@
 #' }
 ghd_copy <- function(gh_user, dest_dir, copy_type, protocol = NULL) {
 
-  if (is.character(gh_user) == FALSE) {
-    stop("Argument gh_user must be a character string that's a GitHub user.\n")
+  if (!is.character(gh_user)) {
+    cli::cli_abort(
+      c(
+        "Argument 'gh_user' must be a character string that's a GitHub user's profile name.",
+        "i" = "You provided an object of class {class(gh_user)}."
+      )
+    )
   }
 
-  if (is.character(dest_dir) == FALSE) {
-    stop("Argument dest_dir must be a character string that represents a file path.\n")
+  if (!is.character(dest_dir)) {
+    cli::cli_abort(
+      c(
+        "Argument 'dest_dir' must be a character string that represents a file path.",
+        "i" = "You provided an object of class {class(dest_dir)}."
+      )
+    )
   }
 
   if (!copy_type %in% c("download", "clone")) {
-    stop("Argument copy_type must be 'clone' or 'download'.\n")
+    cli::cli_abort(
+      c(
+        "Argument 'copy_type' must be 'clone' or 'download'.",
+        "i" = "You provided '{copy_type}'."
+      )
+    )
   }
 
   if (copy_type == "clone" & is.null(protocol)) {
-    stop("You must provide either 'https' or 'ssh' to the protocol argument.")
+    cli::cli_abort(
+      c(
+        "Argument 'protocol' must be 'https' or 'ssh'.",
+        "i" = "You provided '{protocol}'."
+      )
+    )
   }
 
-  if (copy_type == "clone" & !protocol %in% c("https", "ssh")) {
-    stop("You must provide either 'https' or 'ssh' to the protocol argument.")
+  if (copy_type == "clone" && !protocol %in% c("https", "ssh")) {
+    cli::cli_abort(
+      c(
+        "Argument 'protocol' must be 'https' or 'ssh'.",
+        "i" = "You provided '{protocol}'."
+      )
+    )
   }
 
   if (copy_type == "download" & !is.null(protocol)) {
-    warning("You don't need the protocol argument for downloads. Did you mean to clone instead?")
+    cli::cli_alert_warning(
+      paste(
+        "You don't need the 'protocol' argument for downloads.",
+        "Did you mean to clone instead?"
+      )
+    )
+
   }
 
   # Get repo info for the user
@@ -76,19 +108,22 @@ ghd_copy <- function(gh_user, dest_dir, copy_type, protocol = NULL) {
       prompt = paste0("Create new directory at path ", dest_dir, "? y/n: ")
     )
 
+    is_yes <- substr(tolower(q_create_dir), 1, 1) == "y"
+    is_no <- substr(tolower(q_create_dir), 1, 1) == "n"
+
     # Create the directory if 'yes'
-    if (substr(tolower(q_create_dir), 1, 1) == "y") {
+    if (is_yes) {
 
       # Create the directory
       dir.create(path = dest_dir)
 
-    } else if (substr(tolower(q_create_dir), 1, 1) == "n") {
+    } else if (is_no) {
 
-      stop("Aborted by user choice. Retry with another repo.\n")
+      cli::cli_abort("Aborted by user choice. Retry with another repo.")
 
     } else {
 
-      stop("Aborted. Input not understood.\n")
+      cli::cli_abort("Aborted. Input not understood.")
 
     }
 
@@ -100,7 +135,7 @@ ghd_copy <- function(gh_user, dest_dir, copy_type, protocol = NULL) {
 
     ghd_clone_multi(gh_user, names_vec, protocol, dest_dir)
 
-    cat("Finished cloning\n")
+    cli::cli_alert_success("Finished cloning.")
 
   } else if (copy_type == "download") {  # if downloading
 
@@ -112,26 +147,31 @@ ghd_copy <- function(gh_user, dest_dir, copy_type, protocol = NULL) {
 
     # Ask if all should be unzipped
     q_unzip <- readline("Unzip all folders? y/n: ")
+    is_yes <- substr(tolower(q_unzip), 1, 1) == "y"
+    is_no <- substr(tolower(q_unzip), 1, 1) == "n"
 
-    if (substr(tolower(q_unzip), 1, 1) == "y") {
+    if (is_yes) {
 
       # Unzip the files
       ghd_unzip(dest_dir)
 
-    } else if (substr(tolower(q_unzip), 1, 1) == "n") {
+    } else if (is_no) {
 
-      cat("The downloaded directories will not be unzipped.\n")
+      cli::cli_alert_info("The downloaded directories will not be unzipped.")
 
     } else {
 
-      cat(
-        "Input not understood. The downloaded directories will not be unzipped.\n",
-        "See ?ghdump:::ghd_unzip() to unzip the directories yourself.\n"
+      cli::cli_alert_warning(
+        "Input not understood. The downloaded directories will not be unzipped."
+      )
+
+      cli::cli_alert_info(
+        "See ?ghdump:::ghd_unzip() to unzip the directories yourself."
       )
 
     }
 
-    cat("Finished downloading\n")
+    cli::cli_alert_success("Finished downloading.")
 
   }
 

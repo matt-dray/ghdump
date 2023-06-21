@@ -6,9 +6,7 @@
 \alias{ghdump-package}
 \title{ghdump: Clone Or Download All Repos For A GitHub User}
 \description{
-Clone all of a GitHub user's repositories, or download them as zip
-    files to a specified location and optionally unzip them. Intended for
-    archiving or setting up a new computer.
+Clone all of a GitHub user's repositories, or download them as zip files to a specified location and optionally unzip them. Intended for archiving or setting up a new computer.
 }
 \seealso{
 Useful links:

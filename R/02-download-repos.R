@@ -40,20 +40,27 @@ ghd_download_zips <- function(repo_urls, dest_dir) {
   # Ask if all the repos should be downloaded
   q_download_all <- readline(
     prompt = paste0(
-      "Definitely download all ", nrow(repo_urls), " repos? y/n: ")
+      "Definitely download all ", nrow(repo_urls), " repos? y/n: "
+    )
   )
 
-  if (substr(tolower(q_download_all), 1, 1) == "y") {
+  is_yes <- substr(tolower(q_download_all), 1, 1) == "y"
+  is_no <- substr(tolower(q_download_all), 1, 1) == "n"
 
-    cat("Downloading zipped repositories to", dest_dir, "\n")
+  if (is_yes) {
 
-  } else if (substr(tolower(q_download_all), 1, 1) == "n") {
+    cli::cli_alert_info("Downloading zipped repositories to {dest_dir}")
+    cli::cli_alert_info("Hit ESC at any time to abort.")
+
+  } else if (is_no) {
+
+    cli::cli_abort("Aborted by user choice.")
 
     stop("Aborted by user choice.\n")
 
   } else {
 
-    stop("Aborted. Input not understood.\n")
+    cli::cli_abort("Aborted. Input not understand.")
 
   }
 
@@ -99,7 +106,7 @@ ghd_unzip <- function(dir) {
     )
 
   # Unzip the files
-  cat("Unzipping repositories\n")
+  cli::cli_alert_info("Unzipping repositories.")
   purrr::walk(
     .x = zip_files,
     .f = ~ utils::unzip(zipfile = .x, exdir = dir)
@@ -110,34 +117,44 @@ ghd_unzip <- function(dir) {
     prompt = paste0("Retain the zip files? y/n: ")
   )
 
+  is_yes <- substr(tolower(q_keep_zip), 1, 1) == "y"
+  is_no <- substr(tolower(q_keep_zip), 1, 1) == "n"
+
   # React to user input
-  if (substr(tolower(q_keep_zip), 1, 1) == "y") {
+  if (is_yes) {
 
-    cat("Keeping zipped folders.")
+    cli::cli_alert_info("Keeping zipped folders.")
 
-  } else if (substr(tolower(q_keep_zip), 1, 1) == "n") {
+  } else if (is_no) {
 
-    cat("Removing zipped folders\n")
+    cli::cli_alert_info("Removing zipped folders.")
 
     purrr::walk(
       .x = zip_files,
       .f = file.remove
     )
 
+    cli::cli_alert_success("Removed zipped folders.")
+
   } else {
-    cat("Input not understood. Keeping zipped folders.\n")
+
+    cli::cli_alert_warning("Input not understood. Keeping zipped folders.")
+
   }
 
 
   # Ask if "-master" suffix of unzipped files should be replaced
   q_remove_suffix <- readline(
     prompt = paste0(
-      "Remove '-master' suffix from unzipped directory names? y/n: "
+      "Remove branch suffix (e.g. '-main') from unzipped directory names? y/n: "
     )
   )
 
+  is_yes <- substr(tolower(q_remove_suffix), 1, 1) == "y"
+  is_no <- substr(tolower(q_remove_suffix), 1, 1) == "n"
+
   # React to user input
-  if (substr(tolower(q_remove_suffix), 1, 1) == "y") {
+  if (is_yes) {
 
     # Get paths of each unzipped file
     unzipped_dirs <-
@@ -151,25 +168,28 @@ ghd_unzip <- function(dir) {
     rename_df <-
       data.frame(
         from = unzipped_dirs,
-        to = gsub(pattern = "-master", replacement = "", x = unzipped_dirs),
+        to = gsub(pattern = "-.*$", replacement = "", x = unzipped_dirs),
         stringsAsFactors = FALSE
       )
 
     # Rename each file to remove "-master"
-    cat("Renaming files to remove '-master' suffix\n")
+    cli::cli_alert_info("Renaming files to remove branch suffix.")
     purrr::walk2(
       .x = rename_df$from,
       .y = rename_df$to,
       .f = file.rename
     )
+    cli::cli_alert_success("Renamed folders.")
 
-  } else if (substr(tolower(q_remove_suffix), 1, 1) == "n") {
+  } else if (is_no) {
 
-    cat("Unzipped repository names unchanged.\n")
+    cli::cli_alert_info("Unzipped repository names unchanged.")
 
   } else {
 
-    cat("Input not understood. Leaving unzipped repository names unchanged.\n")
+    cli::cli_alert_warning(
+      "Input not understood. Leaving unzipped repository names unchanged."
+    )
 
   }
 

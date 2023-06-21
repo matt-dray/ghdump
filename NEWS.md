@@ -1,3 +1,11 @@
+# ghdump 0.1.0
+
+* Added {cli} for a prettier user interface and added new messages.
+* Fixed bug where providing a protocol borked downloads (#14).
+* Attempted to remove branch name from unzipped file folders by simple regex (`-.*$`) rather than to remove the hard-coded '-master'.
+* Added R-CMD check GitHub Action.
+* Bump v0.1.0.
+
 # ghdump 0.0.0.9006
 
 * Added protocol argument for user to choose HTTPS or SSH (#10)
@@ -12,9 +20,9 @@
 * Introduced cloning functionality for (at least) Mac (#6)
 * Updated readme given new functionality
 * Separated scripts in `r/` into different files
-* Minor improvements to code comments and user prompt text
+* Made minor improvements to code comments and user prompt text
 * Preferred ?readlines() example for 'y'/'n' user input
-* Add license
+* Added license
 
 # ghdump 0.0.0.9003
 

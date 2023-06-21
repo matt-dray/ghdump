@@ -16,9 +16,9 @@ Clone all of a GitHub user's repositories, or download them as zip files (and op
 
 ## Using {ghdump}
 
-Learn more about this package from [an associated blog post](https://www.rostrum.blog/2020/06/14/ghdump/).
+Note that the package does what I need it to do, but is not fully tested for all systems and set-ups. Please [file an issue](https://github.com/matt-dray/ghdump/issues) or raise a pull request if you have a problem or contribution. You can also learn more about this package from [an associated blog post](https://www.rostrum.blog/2020/06/14/ghdump/). 
 
-Note that the package does what I need it to do, but is not fully tested for all systems and set-ups. Please [file an issue](https://github.com/matt-dray/ghdump/issues) or raise a pull request if you have a problem or contribution.
+[The {gitcellar} package](https://docs.ropensci.org/gitcellar/) later appeared on rOpenSci by Maëlle Salmon and Jeroen Ooms. They're very smart, so you might want to check it out. It has a `keep` function that allows you to select only certain repos ({ghdump} doesn't have this feature).
 
 ### Install
 

@@ -1,6 +1,6 @@
 Package: ghdump
 Title: Clone Or Download All Repos For A GitHub User
-Version: 0.0.0.9006
+Version: 0.1.0
 Authors@R: 
     person(given = "Matt",
            family = "Dray",
@@ -15,7 +15,8 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.2.3
 Imports: 
+    cli,
     gh (>= 1.1.0),
     purrr (>= 0.3.4)

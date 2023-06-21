@@ -7,7 +7,8 @@
 ghd_extract_names(repo_object)
 }
 \arguments{
-\item{repo_object}{A gh_response object, as returned by \code{\link{ghd_get_repos}}.}
+\item{repo_object}{A gh_response object, as returned by
+\code{\link{ghd_get_repos}}.}
 }
 \value{
 A character vector of GitHub repo names.

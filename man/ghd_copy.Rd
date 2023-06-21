@@ -30,7 +30,8 @@ all as zip files and then optionally unzip them.
 Make sure you've got a GitHub account and have
 \href{https://happygitwithr.com/github-pat.html}{generated a GitHub PAT}
 and stored it your .Renviron. If you're using \code{protocol = "ssh"},
-you need to make sure you have \href{https://happygitwithr.com/ssh-keys.html}{set up your SSH keys}.
+you need to make sure you have
+\href{https://happygitwithr.com/ssh-keys.html}{set up your SSH keys}.
 }
 \examples{
 \dontrun{

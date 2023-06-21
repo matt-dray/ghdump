@@ -20,7 +20,10 @@
 ghd_clone_one <- function(gh_user, repo, protocol, dest_dir) {
 
   if (!protocol %in% c("https", "ssh")) {
-    stop("You must provide either 'https' or 'ssh' to the protocol argument.")
+
+    cli::cli_abort(
+      "You must provide either 'https' or 'ssh' to the protocol argument."
+    )
   }
 
   # Pass a system call to clone the repo to the destination
@@ -70,10 +73,13 @@ ghd_clone_multi <- function(gh_user, names_vec, protocol, dest_dir) {
     prompt = paste0("Definitely clone all ", length(names_vec), " repos? y/n: ")
   )
 
-  # React to user input
-  if (substr(tolower(q_clone_all), 1, 1) == "y") {
+  is_yes <- substr(tolower(q_clone_all), 1, 1) == "y"
+  is_no <- substr(tolower(q_clone_all), 1, 1) == "n"
 
-    cat("Cloning repositories to", dest_dir, "\n")
+  # React to user input
+  if (is_yes) {
+
+    cli::cli_alert_info("Cloning repositories to {dest_dir}.")
 
     # Prepare safe file clone (passes over failures)
     clone_safely <-
@@ -92,13 +98,15 @@ ghd_clone_multi <- function(gh_user, names_vec, protocol, dest_dir) {
       .f = clone_safely
     )
 
-  } else if (substr(tolower(q_clone_all), 1, 1) == "n") {
+  } else if (is_no) {
+
+    cli::cli_abort("Aborted by user choice.")
 
     stop("Aborted by user choice.\n")
 
   } else {
 
-    stop("Aborted. Input not understood.\n")
+    cli::cli_abort("Aborted. Input not understand.")
 
   }
 

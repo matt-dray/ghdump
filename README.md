@@ -3,9 +3,11 @@
 # ghdump
 
 <!-- badges: start -->
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: Inactive – The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.](https://www.repostatus.org/badges/latest/inactive.svg)](https://www.repostatus.org/#inactive)
+[![R-CMD-check](https://github.com/matt-dray/ghdump/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/matt-dray/ghdump/actions/workflows/R-CMD-check.yaml)
 [![rostrum.blog
 post](https://img.shields.io/badge/rostrum.blog-post-008900?style=flat&labelColor=black&logo=data:image/gif;base64,R0lGODlhEAAQAPEAAAAAABWCBAAAAAAAACH5BAlkAAIAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAAC55QkISIiEoQQQgghRBBCiCAIgiAIgiAIQiAIgSAIgiAIQiAIgRAEQiAQBAQCgUAQEAQEgYAgIAgIBAKBQBAQCAKBQEAgCAgEAoFAIAgEBAKBIBAQCAQCgUAgEAgCgUBAICAgICAgIBAgEBAgEBAgEBAgECAgICAgECAQIBAQIBAgECAgICAgICAgECAQECAQICAgICAgICAgEBAgEBAgEBAgICAgICAgECAQIBAQIBAgECAgICAgIBAgECAQECAQIBAgICAgIBAgIBAgEBAgECAgECAgICAgICAgECAgECAgQIAAAQIKAAAh+QQJZAACACwAAAAAEAAQAAAC55QkIiESIoQQQgghhAhCBCEIgiAIgiAIQiAIgSAIgiAIQiAIgRAEQiAQBAQCgUAQEAQEgYAgIAgIBAKBQBAQCAKBQEAgCAgEAoFAIAgEBAKBIBAQCAQCgUAgEAgCgUBAICAgICAgIBAgEBAgEBAgEBAgECAgICAgECAQIBAQIBAgECAgICAgICAgECAQECAQICAgICAgICAgEBAgEBAgEBAgICAgICAgECAQIBAQIBAgECAgICAgIBAgECAQECAQIBAgICAgIBAgIBAgEBAgECAgECAgICAgICAgECAgECAgQIAAAQIKAAA7)](https://www.rostrum.blog/2020/06/14/ghdump/)
+
 <!-- badges: end -->
 
 ## Purpose
@@ -60,8 +62,7 @@ To download:
 ghdump::ghd_copy(
   gh_user = "matt-dray",
   dest_dir = "~/Documents/repos",
-  copy_type = "download",
-  protocol = "https"
+  copy_type = "download"
 )
 ```
 
@@ -76,7 +77,7 @@ The function is designed to be used interactively and infrequently. To this end,
 
 ## Credits
 
-The function interacts with the GitHub API thanks to [the {gh} package](https://github.com/r-lib/gh) by Gábor Csárdi, Jenny Bryan and Hadley Wickham. Iteration is thanks to [the {purrr} package](https://purrr.tidyverse.org/) by Lionel Henry and Hadley Wickham.
+The function interacts with the GitHub API thanks to [the {gh} package](https://github.com/r-lib/gh) by Gábor Csárdi, Jenny Bryan and Hadley Wickham. Iteration is thanks to [the {purrr} package](https://purrr.tidyverse.org/) by Lionel Henry and Hadley Wickham. [The {cli} package](https://cli.r-lib.org/) allowed for a prettier user interface.
 
 The {ghdump} package sticker was made thanks to Dmytro Perepolkin's [{bunny}](https://github.com/dmi3kno/bunny) package and the [{magick} package](https://cran.r-project.org/web/packages/magick/vignettes/intro.html) from Jeroen Ooms.
 
